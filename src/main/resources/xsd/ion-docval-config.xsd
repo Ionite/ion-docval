@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="Address" type="xs:string" />
+  <xs:element name="Port" type="xs:positiveInteger" />
+  <xs:element name="Name" type="xs:string" />
+  <xs:element name="Description" type="xs:string" />
+  <xs:element name="Keyword" type="xs:string" />
+  <xs:element name="ValidationFile" type="xs:string" />
+  <xs:element name="AutoReload" type="xs:boolean" />
+  <xs:element name="LazyLoad" type="xs:boolean" />
+  <xs:element name="UnknownKeywords" type="UnknownKeywords" />
+  
+  <xs:simpleType name="UnknownKeywords" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="warn" />
+      <xs:enumeration value="error" />
+      <xs:enumeration value="fail" />
+      <xs:enumeration value="ignore" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="Config">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Options" minOccurs="0" />
+        <xs:element ref="Server" minOccurs="0" />
+        <xs:element ref="DocumentType" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Options">
+    <xs:complexType>
+      <xs:all>
+        <xs:element ref="LazyLoad" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="AutoReload" maxOccurs="1" minOccurs="0" />
+        <xs:element ref="UnknownKeywords" maxOccurs="1" minOccurs="0" />
+      </xs:all>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Server">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Listen" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Listen">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Address" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="Port" minOccurs="0" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DocumentType">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="Name" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="Description" minOccurs="0" maxOccurs="1" />
+        <xs:element ref="Keyword" minOccurs="1" maxOccurs="1" />
+        <xs:element ref="ValidationFile" minOccurs="1" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,1 @@
+mvn clean compile test package javadoc:javadoc license:add-third-party license:aggregate-download-licenses assembly:single

@@ -1,0 +1,13 @@
+<Config>
+    <Server>
+        <Listen>
+            <Address>127.0.0.1</Address>
+            <Port>35791</Port>
+        </Listen>
+    </Server>
+    <DocumentType>
+    	<Name>SI-UBL 2.0</Name>
+        <Keyword>default</Keyword>
+        <!-- no validation files -->
+    </DocumentType>
+</Config>

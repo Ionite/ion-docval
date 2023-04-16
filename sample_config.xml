@@ -1,0 +1,58 @@
+<Config>
+    <Options>
+        <!-- 
+            Set this to true to automatically reload validation
+            files when they change on disk.
+        -->
+        <AutoReload>true</AutoReload>
+        <!--
+             Set this to true to Only load validation files when
+             they are needed. This speeds up start-up time, but
+             results in a slower response on first use.
+         -->
+        <LazyLoad>false</LazyLoad>
+        <!-- 
+            How to handle requests for unknown keywords. Options:
+            - ignore: return a validation result with 0 errors and 0 warnings
+            - warn: return a validation result with 0 errors and an unknown keyword warning
+            - error: return a validation result with an unknown keyword error and 0 warnings
+            - fail: throw a ValidatorError (resulting in an HTTP error in the server context)
+        -->
+        <UnknownKeywords>error</UnknownKeywords>
+    </Options>
+    <Server>
+        <!--
+            Specify on which IP addresses and ports to listen for requests.
+            Unless otherwise protected, we strongly suggest using localhost
+            only, and assing security features such as TLS and access control
+            through a reverse proxy such as Nginx or Apache.
+        -->
+        <Listen>
+            <Address>127.0.0.1</Address>
+            <Port>35791</Port>
+        </Listen>
+    </Server>
+
+    <!-- A sample document type with some path suggestions for unix systems -->
+    <!--
+    <DocumentType>
+        <Name>SI-UBL 2.0</Name>
+        <Description>SI-UBL 2.0 (NLCIUS)</Description>
+        <Keyword>urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Keyword>
+        <ValidationFile>/etc/ion-docval/xsd/xsd_ubl2.1/maindoc/UBL-Invoice-2.1.xsd</ValidationFile>
+        <ValidationFile>/etc/ion-docval/xsl/si-ubl-2.0.xsl</ValidationFile>
+    </DocumentType>
+    -->
+
+    <!-- A sample document type with some path suggestions for Windows systems -->
+    <!--
+    <DocumentType>
+        <Name>SI-UBL 2.0</Name>
+        <Description>SI-UBL 2.0 (NLCIUS)</Description>
+        <Keyword>urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Keyword>
+        <ValidationFile>C:\ion-docval\validation-files\xsd\xsd_ubl2.1\maindoc\UBL-Invoice-2.1.xsd</ValidationFile>
+        <ValidationFile>C:\ion-docval\validation-files\xsl\si-ubl-2.0.xsl</ValidationFile>
+    </DocumentType>
+    -->
+
+</Config>

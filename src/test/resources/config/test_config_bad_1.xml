@@ -1,0 +1,14 @@
+<Config>
+    <Server>
+        <Listen>
+            <Address>127.0.0.1</Address>
+            <Port>35791</Port>
+        </Listen>
+    </Server>
+    <DocumentType>
+    	<Name>SI-UBL 2.0</Name>
+        <!-- Keyword missing -->
+        <ValidationFile>/home/jelte/repos/XTST/document_types/testtool/xsd_ubl2.1/maindoc/UBL-Invoice-2.1.xsd</ValidationFile>
+        <ValidationFile>/home/jelte/ionite/repos/validation/xsl/si-ubl-2.0.xsl</ValidationFile>
+    </DocumentType>
+</Config>

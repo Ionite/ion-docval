@@ -1,0 +1,9 @@
+<Config>
+    <Server>
+        <Listen>
+            <Address>127.0.0.1</Address>
+            <Port>35791</Port>
+        </Listen>
+    </Server>
+    <!-- no document types -->
+</Config>

@@ -1,0 +1,280 @@
+<html>
+    <head>
+        <title>ion-docval</title>
+    </head>
+    <body>
+        <center>
+            <div class="block">
+                <h3>ion-docval</h3>
+                <form>
+                    <label for="document-file">Choose file to validate</label>
+                    <input type="file" class="btn" name="document-file" id="document-file" />
+                    <!--<input type="button" class="btn"  onclick="doPost();" value="Validate" />-->
+                </form>
+                <div id="result-summary"></div>
+            </div>
+            <div id="result-details"></div>
+        </center>
+    </body>
+</html>
+
+<script>
+const fileSelector = document.getElementById('document-file');
+fileSelector.addEventListener('change', (event) => {
+    const fileList = event.target.files;
+    console.log(readDataFromFile(fileList[0]));
+});
+
+function doPost() {
+    console.log("1 start");
+    readDataFromFile(document.getElementById("document-file").files[0]);
+    console.log("1 end");
+}
+
+function sendFileData(fileData) {
+    console.log("send data start");
+    let req = new XMLHttpRequest();
+    req.open("POST", '/api/validate');
+    req.setRequestHeader("Accept", "application/json");
+    req.setRequestHeader("Content-Type", "application/xml");
+    req.send(fileData);
+    req.onreadystatechange = () => {
+        console.log("send data event triggered");
+
+        if (req.readyState === 4) {
+            if (req.status == 200) {
+                let results = JSON.parse(req.response);
+                displayResults(results);
+            } else {
+                alert("Error: " + req.response);
+            }
+        }
+    }
+    console.log("send data end");
+}
+
+function readDataFromFile(file) {
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+        sendFileData(event.target.result);
+    });
+    reader.readAsText(file);
+}
+
+
+function showResultSummary(results) {
+    let parent = document.getElementById('result-summary');
+    parent.innerHTML = '';
+
+    let div = document.createElement('div');
+    if (results['error_count'] > 0) {
+        div.setAttribute('class', 'smallblock error');
+    } else if (results['warning_count'] > 0) {
+        div.setAttribute('class', 'smallblock warning');
+    } else {
+        div.setAttribute('class', 'smallblock ok');
+    }
+    let tbl = document.createElement('table');
+    tbl.setAttribute('class', 'bold');
+    let tr, td;
+
+    tr = tbl.insertRow();
+    td = tr.insertCell();
+    td.appendChild(document.createTextNode('Errors'));
+
+    td = tr.insertCell();
+    td.appendChild(document.createTextNode(results['error_count']));
+    tr = tbl.insertRow();
+
+    td = tr.insertCell();
+    td.appendChild(document.createTextNode('Warnings'));
+    td = tr.insertCell();
+    td.appendChild(document.createTextNode(results['warning_count']));
+    
+    div.appendChild(tbl);
+    parent.appendChild(div);
+}
+
+function showResultDetails(results) {
+    
+    //alert(JSON.stringify(results, null, 2));
+    let parent = document.getElementById('result-details');
+    parent.innerHTML = '';
+
+    let tbl, tr, td, div;
+
+    for (let i=0; i<results['errors'].length; i++) {
+        div = document.createElement('div');
+        div.setAttribute('class', 'block error');
+        tbl = document.createElement('table');
+    
+        let el = results['errors'][i];
+
+        let th = tbl.createTHead();
+        tr = th.insertRow();
+        td = tr.insertCell();
+        td.className = "error center";
+        td.appendChild(document.createTextNode('Error'));
+        td.setAttribute('class', 'bold');
+        td.style.width='50px';
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(el['message']));
+        //td.setAttribute('class', 'error topright');
+        td.style.width='100%';
+        //td.setAttribute('colspan', '2');
+        td.setAttribute('class', 'bold');
+        tr = tbl.insertRow();
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode('Test'));
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(el['test']));
+        if (el['location'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Location'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['location']));
+        }
+        if (el['line'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Line'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['line']));
+        }
+        if (el['column'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Column'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['column']));
+        }
+        div.appendChild(tbl);
+        parent.appendChild(div);
+    }
+
+    for (let i=0; i<results['warnings'].length; i++) {
+        div = document.createElement('div');
+        div.setAttribute('class', 'block warning');
+        tbl = document.createElement('table');
+    
+        let el = results['warnings'][i];
+
+        let th = tbl.createTHead();
+        tr = th.insertRow();
+        td = tr.insertCell();
+        td.className = "warning center";
+        td.appendChild(document.createTextNode('Warning'));
+        td.setAttribute('class', 'bold');
+        td.style.width='50px';
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(el['message']));
+        //td.setAttribute('class', 'warning topright');
+        td.style.width='100%';
+        //td.setAttribute('colspan', '2');
+        td.setAttribute('class', 'bold');
+        tr = tbl.insertRow();
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode('Test'));
+        td = tr.insertCell();
+        td.appendChild(document.createTextNode(el['test']));
+        if (el['location'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Location'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['location']));
+        }
+        if (el['line'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Line'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['line']));
+        }
+        if (el['column'] != null) {
+            tr = tbl.insertRow();
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode('Column'));
+            td = tr.insertCell();
+            td.appendChild(document.createTextNode(el['column']));
+        }
+        div.appendChild(tbl);
+        parent.appendChild(div);
+    }
+}
+
+function displayResults(results) {
+    showResultSummary(results);
+
+    showResultDetails(results);
+}
+
+</script>
+<style>
+.ok {
+    background-color: #b3ffb3;
+}
+.error {
+    background-color: #f4a4a4;
+}
+.warning {
+    background-color: #ffccb3;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+
+.error-header {
+    font-weight: bold;
+}
+
+.warning-header {
+    font-weight: bold;
+}
+
+.smallblock {
+  padding: 4px;
+  box-shadow: 3px 3px 5px grey;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid black;
+  margin: auto;
+  width: fit-content;
+}
+
+.block {
+  padding: 4px;
+  box-shadow: 3px 3px 5px grey;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: 1px solid black;
+  margin: auto 12%;
+  margin-top: 10px;
+  overflow: scroll;
+}
+
+input {
+  box-shadow: 3px 3px 5px grey;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 4px;
+  border: 1px solid black;
+  padding: 4px;
+}
+
+tr {
+  border: 1px solid #000000;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 6px 10px;
+}
+  
+
+</style>

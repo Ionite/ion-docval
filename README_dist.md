@@ -1,5 +1,5 @@
 
-# ion-docval source repository
+# ion-docval binary distribution
 
 ## Introduction
 
@@ -13,19 +13,11 @@ With ion-docval, you can run a local validation service without having to upload
 
 This is the same software that is used as part of the [NPa Peppol Test Tool](https://test.peppolautoriteit.nl/validate).
 
-## Distribution
 
-This is the source repository of ion-docval. If you are looking for the pre-compiled binary distribution, go [here](https://github.com/ionite/ion-docval/releases)
+## Source code
 
-## Building
+This is the binary distribution for ion-docval. The source code can be found [on github](https://github.com/ionite/ion-docval).
 
-In order to build this software, you need [Maven](https://maven.apache.org).
-
-To (re)build the main source code:
-    mvn clean compile package
-
-To build everything and create a distribution zipfile:
-    mvn package javadoc:javadoc license:add-third-party license:aggregate-download-licenses assembly:single
 
 ## Manual
 
@@ -34,3 +26,5 @@ For information on how to run, use, or integrate ion-docval, see the [manual](do
 ## License
 
 This software is licensed under the MIT license. See [LICENSE](LICENSE) for more information.
+
+This binary distribution also includes a number of dependencies that have their own licenses. See the [Third Party](THIRD-PARTY.txt) file for an overview of these licenses, and the [licenses directory](docs/licenses) for all complete licenses.

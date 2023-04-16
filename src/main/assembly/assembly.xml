@@ -1,0 +1,94 @@
+<assembly>
+  <id>dist</id>
+  <!-- Specifies that our binary distribution is a zip package -->
+  <formats>
+    <format>zip</format>
+  </formats>
+
+  <includeBaseDirectory>true</includeBaseDirectory>
+
+  <!-- Adds the dependencies of our application to the lib directory -->
+  <dependencySets>
+    <dependencySet>
+      <useProjectArtifact>true</useProjectArtifact>
+      <outputDirectory>lib</outputDirectory>
+      <unpack>false</unpack>
+    </dependencySet>
+  </dependencySets>
+  <fileSets>
+
+    <!--
+         Add the runner scripts
+    -->
+    <fileSet>
+      <directory>${project.build.scriptSourceDirectory}</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+      <excludes>
+        <exclude>*.bat</exclude>
+      </excludes>
+      <fileMode>0755</fileMode>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.scriptSourceDirectory}</directory>
+      <outputDirectory>bin</outputDirectory>
+      <includes>
+        <include>*.bat</include>
+      </includes>
+    </fileSet>
+    
+    <!--
+        Add documentation, third-party license information, and apidocs
+    -->
+    <fileSet>
+      <directory>${project.basedir}/docs</directory>
+      <outputDirectory>docs</outputDirectory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/generated-resources/licenses</directory>
+      <outputDirectory>docs/licenses</outputDirectory>
+      <includes>
+        <include>*</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>${project.build.directory}/site/apidocs</directory>
+      <outputDirectory>docs/apidocs</outputDirectory>
+      <includes>
+        <include>**/*</include>
+      </includes>
+    </fileSet>
+    
+  </fileSets>
+  
+  <!-- individual files: THIRD-PARTY, README, etc. -->
+  <files>
+    <file>
+        <source>${project.basedir}/scripts/ion-docval-client.py</source>
+        <outputDirectory>bin</outputDirectory>
+        <fileMode>0755</fileMode>
+    </file>
+    <file>
+        <source>${project.basedir}/LICENSE</source>
+        <outputDirectory>/</outputDirectory>
+    </file>
+    <file>
+        <source>${project.basedir}/sample_config.xml</source>
+        <outputDirectory>/</outputDirectory>
+    </file>
+    <file>
+        <source>${project.basedir}/README_dist.md</source>
+        <outputDirectory>/</outputDirectory>
+        <destName>/README.md</destName>
+    </file>
+    <file>
+        <source>${project.build.directory}/generated-sources/license/THIRD-PARTY.txt</source>
+        <outputDirectory>/</outputDirectory>
+    </file>
+  </files>
+</assembly>
