@@ -122,9 +122,9 @@ def derive_keyword_from_xml(xml_bytes):
     return f"{root_tag.namespace}::{root_tag.localname}##{doctype}::{version}"
     
 
-def print_result_element(el_type, el):
-        print(el_type)
-        print(f"    Message: {el['message']}")
+def print_result_element(el_type, el, show_details):
+    print(f"{el_type}: {el['message']}")
+    if show_details:
         print(f"       test: {el['test']}")
         if 'location' in el:
             print(f"   location: {el['location']}")
@@ -132,19 +132,16 @@ def print_result_element(el_type, el):
             print(f"       line: {el['line']}")
         if 'column' in el:
             print(f"     column: {el['column']}")
+        print("")
     
 def print_result_data(result_data, show_details):
     print(f"Errors: {result_data['error_count']}")
     print(f"Warnings: {result_data['warning_count']}")
     print("")
-    if show_details:
-        for err in result_data['errors']:
-            print_result_element("Error", err)
-            print("")
-        for warn in result_data['warnings']:
-            print_result_element("Warning", warn)
-            print("")
-        print("")
+    for err in result_data['errors']:
+        print_result_element("Error", err, show_details)
+    for warn in result_data['warnings']:
+        print_result_element("Warning", warn, show_details)
 
 def main():
     arg_parser = argparse.ArgumentParser()
