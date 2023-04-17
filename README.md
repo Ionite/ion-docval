@@ -1,13 +1,16 @@
 
-# ion-docval source repository
+# ion-docval - Ionite Document Validator
 
 ## Introduction
 
-ion-docval is an XML document validator written in Java, which supports validating documents against multiple validation files, and supports multiple validation formats. These formats are:
+ion-docval is an XML document validation library and toolset.
 
-- XML Schema (.xsd files)
-- Schematron (.sch files)
-- SVRL Transformation files (.xsl/.xslt files, but only those for SVRL, i.e. those created from Schematron files)
+Features:
+- validate an XML document against multiple definition files
+- Supports XML Schema (.xsd) files
+- Supports Schematron (.sch) files
+- Supports SVRL Transformation files (.xsl/.xslt) files (i.e. those generated from Schematron)
+- Integratable .jar file, direct command-line application, and (local) server for bulk processing
 
 With ion-docval, you can run a local validation service without having to upload your documents to an online validation tool.
 
