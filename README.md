@@ -25,9 +25,11 @@ This is the source repository of ion-docval. If you are looking for the pre-comp
 In order to build this software, you need [Maven](https://maven.apache.org).
 
 To (re)build the main source code:
+
     mvn clean compile package
 
 To build everything and create a distribution zipfile:
+
     mvn package javadoc:javadoc license:add-third-party license:aggregate-download-licenses assembly:single
 
 ## Manual
