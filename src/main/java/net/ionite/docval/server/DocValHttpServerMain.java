@@ -2,6 +2,8 @@ package net.ionite.docval.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +33,8 @@ public class DocValHttpServerMain {
 		parser.addArgument("-c", "--config").help("Use configuration file with schema/schematron definitions");
 		parser.addArgument("-v", "--verbose").action(Arguments.storeConst()).setConst(true).setDefault(false)
 				.help("Print verbose debug output");
+        parser.addArgument("-q", "--quiet").action(Arguments.storeConst()).setConst(true).setDefault(false)
+				.help("Disable logging output");
 		parser.addArgument("-V", "--version").action(Arguments.storeConst()).setConst(true).setDefault(false)
 				.help("Print the software version and exit");
 
@@ -44,8 +48,10 @@ public class DocValHttpServerMain {
 
 			if ((Boolean) args.get("verbose")) {
 				System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "TRACE");
-			} else {
+			} else if ((Boolean) args.get("quiet")) {
 				System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "OFF");
+			} else {
+				System.setProperty(SimpleLogger.DEFAULT_LOG_LEVEL_KEY, "INFO");
 			}
 			Logger logger = LoggerFactory.getLogger(DocValHttpServer.class.getName());
 
@@ -58,44 +64,45 @@ public class DocValHttpServerMain {
 				// - {current directory}/default_config.xml
 				String configFile = args.get("config");
 				//System.out.println("");
-				if (configFile == null) {
-					String path = System.getProperty("user.home") + "/.config/ion-docval.conf";
+                List<String> paths = List.of(
+                    System.getProperty("user.home") + "/.config/ion-docval.conf",
+                    "/etc/ion-docval.conf",
+                    System.getProperty("user.dir") + "/ion-docval.conf",
+                    System.getProperty("user.dir") + "/../ion-docval.conf"
+                );
+                for (String path : paths) {
 					logger.debug("Try configuration file path: " + path);
 					if (new File(path).exists()) {
+                        logger.debug("Found configuration file, using: " + path);
 						configFile = path;
+                        break;
 					}
-				}
-				if (configFile == null) {
-					String path = "/etc/ion-docval.conf";
-					logger.debug("Try configuration file path: " + path);
-					if (new File(path).exists()) {
-						configFile = path;
-					}
-				}
-				if (configFile == null) {
-					String path = System.getProperty("user.dir") + "/ion-docval.conf";
-					logger.debug("Try configuration file path: " + path);
-					if (new File(path).exists()) {
-						configFile = path;
-					}
-				}
+                }
 				if (configFile == null) {
 					System.err.println("No configuration file found and no file provided, aborting.");
+                    System.err.println("The following configuration files locations were tried:");
+                    for (String path : paths) {
+                        System.err.println(path);
+                    }
 					System.exit(-1);
 				}
 				try {
 					logger.debug("Using configuration file: " + configFile);
 
 					DocValHttpServer server = new DocValHttpServer(configFile);
-					Signal.handle(new Signal("HUP"), signal -> {
-						try {
-							System.out.println(signal.getName() + " (" + signal.getNumber() + ")");
-							server.loadConfigFile();
-						} catch (Exception exc) {
-							System.err.println("Error reloading configuration file. Not updating configuration");
-							exc.printStackTrace();
-						}
-					});
+                    try {
+                        Signal.handle(new Signal("XHUP"), signal -> {
+                            try {
+                                System.out.println(signal.getName() + " (" + signal.getNumber() + ")");
+                                server.loadConfigFile();
+                            } catch (Exception exc) {
+                                System.err.println("Error reloading configuration file. Not updating configuration");
+                                exc.printStackTrace();
+                            }
+                        });
+                    } catch (IllegalArgumentException iae) {
+                        // HUP not supported on this platform
+                    }
 					server.start();
 
 					Thread.currentThread().join();

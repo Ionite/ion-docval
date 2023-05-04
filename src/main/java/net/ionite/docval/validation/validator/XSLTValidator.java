@@ -195,9 +195,9 @@ public class XSLTValidator implements DocumentValidator {
 		}
 		if (_filename != null) {
 			if (transformer == null) {
-				logger.info("Loading XSLT file {}", _filename);
+				logger.debug("Loading {}", _filename);
 			} else {
-				logger.info("Reloading XLST file {}", _filename);
+				logger.info("Reloading {}", _filename);
 			}
 		} else {
 			logger.info("Loading XSLT validator from stream");

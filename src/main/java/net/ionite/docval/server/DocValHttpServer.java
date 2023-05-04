@@ -307,6 +307,7 @@ public class DocValHttpServer extends Thread {
 
 		this.configFile = configFile;
 		setValidatorManager(new ValidatorManager());
+        logger.debug("Reading configuration file");
 		this.loadConfigFile();
 
 		/* For now, listeners are only started once */
@@ -380,7 +381,7 @@ public class DocValHttpServer extends Thread {
 	 * @throws IOException if the port could not be opened for listening.
 	 */
 	public void addListener(String host, int port) throws IOException {
-		logger.info("ion-docval HTTP server binding to " + host + " port " + port);
+		logger.debug("ion-docval HTTP server binding to " + host + " port " + port);
 		HttpServer listener = HttpServer.create(new InetSocketAddress(host, port), 100);
 		listener.createContext("/validate", new IndexHandler());
 		listener.createContext("/api/validate", new ValidatorHandler(validatorManager));

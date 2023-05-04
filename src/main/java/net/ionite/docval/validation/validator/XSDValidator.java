@@ -68,12 +68,12 @@ public class XSDValidator implements DocumentValidator {
 		}
 		if (_filename != null) {
 			if (_validator == null) {
-				logger.info("Loading XSD file {}", _filename);
+				logger.debug("Loading {}", _filename);
 			} else {
-				logger.info("Reloading XSD file {}", _filename);
+				logger.info("Reloading {}", _filename);
 			}
 		} else {
-			logger.info("Loading XSD validator from stream");
+			logger.debug("Loading XSD validator from stream");
 		}
 		try {
 			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
