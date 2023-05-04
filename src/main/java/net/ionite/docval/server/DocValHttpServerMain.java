@@ -64,25 +64,25 @@ public class DocValHttpServerMain {
 				// - {current directory}/default_config.xml
 				String configFile = args.get("config");
 				//System.out.println("");
-                List<String> paths = List.of(
-                    System.getProperty("user.home") + "/.config/ion-docval.conf",
-                    "/etc/ion-docval.conf",
-                    System.getProperty("user.dir") + "/ion-docval.conf",
-                    System.getProperty("user.dir") + "/../ion-docval.conf"
+                List<File> files = List.of(
+                    new File(System.getProperty("user.home") + "/.config/ion-docval.conf"),
+                    new File("/etc/ion-docval.conf"),
+                    new File(System.getProperty("user.dir") + "/ion-docval.conf"),
+                    new File(System.getProperty("user.dir") + "/../ion-docval.conf")
                 );
-                for (String path : paths) {
-					logger.debug("Try configuration file path: " + path);
-					if (new File(path).exists()) {
-                        logger.debug("Found configuration file, using: " + path);
-						configFile = path;
+                for (File file : files) {
+					logger.debug("Try configuration file path: " + file.getCanonicalPath());
+					if (file.exists()) {
+                        logger.debug("Found configuration file, using: " + file.getCanonicalPath());
+						configFile = file.getCanonicalPath();
                         break;
 					}
                 }
 				if (configFile == null) {
 					System.err.println("No configuration file found and no file provided, aborting.");
                     System.err.println("The following configuration files locations were tried:");
-                    for (String path : paths) {
-                        System.err.println(path);
+                    for (File file : files) {
+                        System.err.println(file.getCanonicalPath());
                     }
 					System.exit(-1);
 				}
@@ -114,6 +114,9 @@ public class DocValHttpServerMain {
 					System.out.println(ioe.getMessage());
 					System.exit(-3);
 				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.exit(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				System.exit(1);
