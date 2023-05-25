@@ -15,6 +15,7 @@ import net.ionite.docval.validation.validator.DocumentValidator;
 import net.ionite.docval.validation.validator.SCHValidator;
 import net.ionite.docval.validation.validator.XSDValidator;
 import net.ionite.docval.validation.validator.XSLTValidator;
+import net.ionite.docval.xml.KeywordDeriver;
 
 /**
  * The validator manager holds any number of validators for a specific keyword,
@@ -327,6 +328,28 @@ public class ValidatorManager {
 	 */
 	public ValidationResult validate(String keyword, byte[] source) {
 		ValidationResult result = new ValidationResult();
+        if (keyword == null) {
+            try {
+                KeywordDeriver kwd = new KeywordDeriver();
+                keyword = kwd.deriveKeyword(source);
+            } catch (ValidatorException derivationError) {
+                switch (unknownKeywords) {
+                case WARN:
+                    result.addWarning("Unable to derive document type keyword: " + derivationError.toString(), null, null, null,
+                            "Validator selection");
+                    break;
+                case ERROR:
+                    result.addError("Unable to derive document type keyword: " + derivationError.toString(), null, null, null,
+                            "Validator selection");
+                    break;
+                case FAIL:
+                    throw derivationError;
+                case IGNORE:
+                    break;
+                }
+            }
+        }
+
 		ArrayList<String> validatorNames = getValidatorNamesForKeyword(keyword);
 		if (validatorNames.isEmpty()) {
 			logger.info("No document type configured with keyword: " + keyword + ", raising exception");

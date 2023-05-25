@@ -247,11 +247,6 @@ public class DocValHttpServer extends Thread {
 			String keyword = readRequestParameters(t).getOrDefault("keyword", null);
 
 			try {
-				if (keyword == null) {
-					KeywordDeriver kwd = new KeywordDeriver();
-					keyword = kwd.deriveKeyword(inputData);
-				}
-
 				switch (responseContentType) {
 				case XML:
 					try {
