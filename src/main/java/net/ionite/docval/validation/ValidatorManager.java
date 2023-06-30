@@ -333,13 +333,17 @@ public class ValidatorManager {
                 KeywordDeriver kwd = new KeywordDeriver();
                 keyword = kwd.deriveKeyword(source);
             } catch (ValidatorException derivationError) {
+                String msg = "Unable to derive document type keyword: " + derivationError.toString();
+                if (msg.contains("Content is not allowed in prolog")) {
+                    msg = msg + " There may be a mismatch between the encoding of the XML data and the encoding in the XML declaration.";
+                }
                 switch (unknownKeywords) {
                 case WARN:
-                    result.addWarning("Unable to derive document type keyword: " + derivationError.toString(), null, null, null,
+                    result.addWarning(msg, null, null, null,
                             "Validator selection");
                     break;
                 case ERROR:
-                    result.addError("Unable to derive document type keyword: " + derivationError.toString(), null, null, null,
+                    result.addError(msg, null, null, null,
                             "Validator selection");
                     break;
                 case FAIL:
@@ -347,6 +351,8 @@ public class ValidatorManager {
                 case IGNORE:
                     break;
                 }
+                // Don't continue if we can't even derive the keyword.
+                return result;
             }
         }
 
