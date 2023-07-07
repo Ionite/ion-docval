@@ -148,7 +148,13 @@ public class KeywordDeriver {
 				}
 			}
 
-			return namespace + "::" + rootElement + "##" + customization + "::" + version;
+			if (customization == null) {
+				return namespace + "::" + rootElement;
+			} else if (version == null) {
+				return namespace + "::" + rootElement + "##" + customization;
+			} else {
+				return namespace + "::" + rootElement + "##" + customization + "::" + version;
+			}
 		}
 	}
 

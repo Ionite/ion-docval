@@ -62,4 +62,16 @@ public class KeywordDeriverTest {
 				"urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100::CrossIndustryInvoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::D16B");
 	}
 
+	@Test
+	public void testKeywordDeriverEUSR110() {
+		testDocument("xml/eusr-1.1.0.xml",
+				"urn:fdc:peppol:end-user-statistics-report:1.1::EndUserStatisticsReport##urn:fdc:peppol.eu:edec:trns:end-user-statistics-report:1.1");
+	}
+
+	@Test
+	public void testKeywordDeriverTSR100() {
+		testDocument("xml/tsr-1.0.0.xml",
+				"urn:fdc:peppol:transaction-statistics-report:1.0::TransactionStatisticsReport##urn:fdc:peppol.eu:edec:trns:transaction-statistics-reporting:1.0");
+	}
+
 }

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TransactionStatisticsReport xmlns="urn:fdc:peppol:transaction-statistics-report:1.0">
+  <CustomizationID>urn:fdc:peppol.eu:edec:trns:transaction-statistics-reporting:1.0</CustomizationID>
+  <ProfileID>urn:fdc:peppol.eu:edec:bis:reporting:1.0</ProfileID>
+  <Header>
+    <ReportPeriod>
+      <StartDate>2023-01-01</StartDate>
+      <EndDate>2023-12-31</EndDate>
+    </ReportPeriod>
+    <ReporterID schemeID="CertSubjectCN">PNL000500</ReporterID>
+  </Header>
+  <Total>
+    <Incoming>0</Incoming>
+    <Outgoing>6</Outgoing>
+  </Total>
+  <Subtotal type="PerTP">
+    <Key metaSchemeID="TP" schemeID="Peppol">peppol-transport-as4-v2_0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>6</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNO000187</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:urn:www.peppol.eu:bis:peppol4a:ver2.0:extended:urn:www.simplerinvoicing.org:si:si-ubl:ver1.1.x::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:www.cenbii.eu:profile:bii04:ver1.0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>1</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000500</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>2</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000059</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>1</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PBE000268</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>1</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000052</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>1</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR-CC">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNO000187</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:www.cenbii.eu:transaction:biitrns010:ver2.0:extended:urn:www.peppol.eu:bis:peppol4a:ver2.0:extended:urn:www.simplerinvoicing.org:si:si-ubl:ver1.1.x::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:www.cenbii.eu:profile:bii04:ver1.0</Key>
+    <Key metaSchemeID="CC" schemeID="SenderCountry">NL</Key>
+    <Key metaSchemeID="CC" schemeID="ReceiverCountry">NL</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>0</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR-CC">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000500</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Key metaSchemeID="CC" schemeID="SenderCountry">NL</Key>
+    <Key metaSchemeID="CC" schemeID="ReceiverCountry">NL</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>0</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR-CC">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000059</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Key metaSchemeID="CC" schemeID="SenderCountry">NL</Key>
+    <Key metaSchemeID="CC" schemeID="ReceiverCountry">NL</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>0</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR-CC">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PBE000268</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:peppol.eu:2017:poacc:billing:3.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Key metaSchemeID="CC" schemeID="SenderCountry">GB</Key>
+    <Key metaSchemeID="CC" schemeID="ReceiverCountry">SE</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>0</Outgoing>
+  </Subtotal>
+  <Subtotal type="PerSP-DT-PR-CC">
+    <Key metaSchemeID="SP" schemeID="CertSubjectCN">PNL000052</Key>
+    <Key metaSchemeID="DT" schemeID="busdox-docid-qns">urn:oasis:names:specification:ubl:schema:xsd:Invoice-2::Invoice##urn:cen.eu:en16931:2017#compliant#urn:fdc:nen.nl:nlcius:v1.0::2.1</Key>
+    <Key metaSchemeID="PR" schemeID="cenbii-procid-ubl">urn:fdc:peppol.eu:2017:poacc:billing:01:1.0</Key>
+    <Key metaSchemeID="CC" schemeID="SenderCountry">NL</Key>
+    <Key metaSchemeID="CC" schemeID="ReceiverCountry">NL</Key>
+    <Incoming>0</Incoming>
+    <Outgoing>0</Outgoing>
+  </Subtotal>
+</TransactionStatisticsReport>
