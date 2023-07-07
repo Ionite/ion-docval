@@ -78,7 +78,11 @@ class DocValClient:
             'Accept': 'application/json'
         }
         
-        response = requests.post(f"http://{self.host}:{self.port}/api/validate", data=data, headers=headers)
+        url = f"http://{self.host}:{self.port}/api/validate"
+        if keyword is not None:
+            url += f"?keyword={requests.utils.quote(keyword)}"
+        print(f"[XX] URL: {url}")
+        response = requests.post(url, data=data, headers=headers)
         if (response.status_code == 200):
             return json.loads(response.content)
         result = {}
@@ -93,9 +97,11 @@ def derive_keyword_from_xml(xml_bytes):
     root_tag = etree.QName(document.tag)
     
     # Find
-    doctype = "null"
+    doctype = None
     for path in [
         "{urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2}CustomizationID",
+        "{urn:fdc:peppol:end-user-statistics-report:1.1}CustomizationID",
+        "{urn:fdc:peppol:transaction-statistics-report:1.0}CustomizationID",
         "{urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:100}ExchangedDocumentContext/{urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100}GuidelineSpecifiedDocumentContextParameter/{urn:un:unece:uncefact:data:standard:ReusableAggregateBusinessInformationEntity:100}ID"
     ]:
         doctype_el = document.find(path)
@@ -109,17 +115,22 @@ def derive_keyword_from_xml(xml_bytes):
     elif root_tag.namespace.startswith("urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:"):
         version = "D16B"
     else:
-        version = "null"
+        version = None
 
     # override default version if specified in document
     for path in [
         "{urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2}UBLVersionID"
     ]:
-        version_el = document.find(version)
+        version_el = document.find(path)
         if version_el is not None and version_el.text is not None:
             version = version_el.text
     
-    return f"{root_tag.namespace}::{root_tag.localname}##{doctype}::{version}"
+    if doctype is None:
+        return f"{root_tag.namespace}::{root_tag.localname}"
+    elif version is not None:
+        return f"{root_tag.namespace}::{root_tag.localname}##{doctype}::{version}"
+    else:
+        return f"{root_tag.namespace}::{root_tag.localname}##{doctype}"
     
 
 def print_result_element(el_type, el, show_details):
