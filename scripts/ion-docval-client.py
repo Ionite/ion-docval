@@ -29,7 +29,7 @@ def xml_safe_fromstring(data: Union[str, bytes]) -> etree._Element:
         data = data.encode('utf-8')
     document = etree.fromstring(data, parser=parser)
     for _ in document.iter(etree.Entity):
-        raise DataError("Entities are not allowed in XML documents")
+        raise ValueError("Entities are not allowed in XML documents")
     return document
 
 def get_document_from_sbdh(xml_bytes):

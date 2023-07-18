@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+import net.ionite.docval.validation.ValidatorException;
 import net.ionite.docval.xml.KeywordDeriver;
 
 public class KeywordDeriverTest {
@@ -72,6 +73,36 @@ public class KeywordDeriverTest {
 	public void testKeywordDeriverTSR100() {
 		testDocument("xml/tsr-1.0.0.xml",
 				"urn:fdc:peppol:transaction-statistics-report:1.0::TransactionStatisticsReport##urn:fdc:peppol.eu:edec:trns:transaction-statistics-reporting:1.0");
+	}
+
+	@Test
+	public void testKeywordDeriverXXE1() {
+		try {
+			testDocument("xml/shiporder_xxe1.xml", "N/A");
+			Assert.assertTrue("Expected exception to be thrown", false);
+		} catch (ValidatorException ve) {
+			// ok
+		}
+	}
+
+	@Test
+	public void testKeywordDeriverXXE2() {
+		try {
+			testDocument("xml/shiporder_xxe2.xml", "N/A");
+			Assert.assertTrue("Expected exception to be thrown", false);
+		} catch (ValidatorException ve) {
+			// ok
+		}
+	}
+
+	@Test
+	public void testKeywordDeriverXXE3() {
+		try {
+			testDocument("xml/shiporder_xxe3.xml", "N/A");
+			Assert.assertTrue("Expected exception to be thrown", false);
+		} catch (ValidatorException ve) {
+			// ok
+		}
 	}
 
 }

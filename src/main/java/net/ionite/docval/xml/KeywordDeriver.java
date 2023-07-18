@@ -177,6 +177,13 @@ public class KeywordDeriver {
 	public String deriveKeyword(InputStream source) {
 		try {
 			SAXParserFactory sfactory = SAXParserFactory.newInstance();
+
+			sfactory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+			sfactory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+			sfactory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);    
+			sfactory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+			sfactory.setXIncludeAware(false);
+
 			sfactory.setNamespaceAware(true);
 			SAXParser parser = sfactory.newSAXParser();
 			DeriverXMLHandler handler = new DeriverXMLHandler();
