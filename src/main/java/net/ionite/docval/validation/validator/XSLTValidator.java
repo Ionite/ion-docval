@@ -249,6 +249,8 @@ public class XSLTValidator implements DocumentValidator {
 			tfError.printStackTrace();
 			throw new ValidatorException("Error performing XSLT transformation" + tfError.toString(), tfError);
 		}
+		logger.debug("Validated document against SCH/XSLT {}: {} errors, {} warnings", _filename, result.errorCount(),
+				result.warningCount());
 		return result;
 	}
 

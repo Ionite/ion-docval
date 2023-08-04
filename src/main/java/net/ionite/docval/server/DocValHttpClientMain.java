@@ -51,8 +51,8 @@ public class DocValHttpClientMain {
 		parser = ArgumentParsers.newFor("ion-docval-cli").addHelp(true).build()
 				.description("Validate a document given any number of XSD or Schematron XSLT files");
 		parser.addArgument("-u", "--uri")
-				.help("Override the default or configured server URI (defaults to http://localhost:35791)")
-				.setDefault("http://localhost:35791");
+				.help("Override the default or configured server URI (defaults to http://localhost:35791/api/validate)")
+				.setDefault("http://localhost:35791/api/validate");
 		parser.addArgument("-o", "--output-format").setDefault("text")
 				.help("Set the output format, one of: text (default), details, xml, json, none");
 		parser.addArgument("-v", "--verbose").action(Arguments.storeConst()).setConst(true).setDefault(false)
