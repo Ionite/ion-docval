@@ -21,10 +21,15 @@ This is the binary distribution for ion-docval. The source code can be found [on
 
 ## Manual
 
-For information on how to run, use, or integrate ion-docval, see the [manual](docs/manual.md)
+For information on how to run, use, or integrate ion-docval, see the [manual](https://ion-docval.ionite.net/manual/introduction/)
+
 
 ## License
 
 This software is licensed under the MIT license. See [LICENSE](LICENSE) for more information.
 
-This binary distribution also includes a number of dependencies that have their own licenses. See the [Third Party](THIRD-PARTY.txt) file for an overview of these licenses, and the [licenses directory](docs/licenses) for all complete licenses.
+## Support
+
+This software is free. Our time is not.
+
+If you need help setting things up, if you have any feature requests, if you encounter bugs that need to be solved quickly, or if you simply want to make sure this project will be maintained in the future, you can [Contact Ionite](mailto:contact@ionite.net) to discuss a support or development contract.
