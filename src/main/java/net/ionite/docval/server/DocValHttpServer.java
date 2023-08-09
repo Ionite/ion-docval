@@ -360,9 +360,10 @@ public class DocValHttpServer extends Thread {
 			// Apply the configuration on a new instance of the manager;
 			// the old one keeps running in the meantime
 			// If the new one fails, the old one stays active
-			ValidatorManager newManager = new ValidatorManager();
-			newManager.applyConfig(newConfigData);
-			setValidatorManager(newManager);
+			//ValidatorManager newManager = new ValidatorManager();
+			//newManager.applyConfig(newConfigData);
+			//setValidatorManager(newManager);
+			validatorManager.applyConfig(newConfigData);
 			configData = newConfigData;
 		}
 	}

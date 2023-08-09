@@ -28,23 +28,10 @@ import net.ionite.docval.xml.KeywordDeriver;
 public class ValidatorManager {
 
 	/** The loaded validators based on their filename */
-	volatile private HashMap<String, ValidatorManagerEntry> _validators;
+	private HashMap<String, ValidatorManagerEntry> _validators;
 
 	/** The mapping of keywords to validation lists */
-	volatile private HashMap<String, ArrayList<String>> _validationLists;
-
-	/**
-	 * In order to keep serving data during a (potentially long) reload action, we
-	 * keep a bit of state regarding reloads. When a reload is triggered, we set
-	 * this state to 'true'. When 'true', any action that would add a validator or
-	 * validation file to the live structures adds them to the temporary structures
-	 * instead. When done, the live structures are replaced by the temporary ones
-	 */
-	boolean reloadingFullConfiguration = false;
-	/** Temporary map of validators, used when reloading */
-	private HashMap<String, ValidatorManagerEntry> _tmpValidators;
-	/** Temporary mapping of keywords to validation lists, used when reloading */
-	private HashMap<String, ArrayList<String>> _tmpValidationLists;
+	private HashMap<String, ArrayList<String>> _validationLists;
 
 	/**
 	 * If true, automatically check whether entries need to be reloaded
@@ -112,6 +99,51 @@ public class ValidatorManager {
 	}
 
 	/**
+	 * Inner class to perform validator loading
+	 * This class allows loading of new validators
+	 * while the old list of validators is still in use,
+	 * then replace all of them at once
+	 */
+	private class ValidatorLoader {
+		/** The loaded validators based on their filename */
+		private HashMap<String, ValidatorManagerEntry> validators;
+
+		/** The mapping of keywords to validation lists */
+		private HashMap<String, ArrayList<String>> validationLists;
+
+		public ValidatorLoader() {
+			validators = new HashMap<String, ValidatorManagerEntry>();
+			validationLists = new HashMap<String, ArrayList<String>>();
+		}
+
+		public void addValidator(String keyword, String fileName, boolean lazyLoad) {
+			ArrayList<String> validatorsForKeyword = validationLists.get(keyword);
+			if (validatorsForKeyword == null) {
+				validatorsForKeyword = new ArrayList<String>();
+				validationLists.put(keyword, validatorsForKeyword);
+			}
+			if (!validatorsForKeyword.contains(fileName)) {
+				validatorsForKeyword.add(fileName);
+			}
+			if (!lazyLoad) {
+				validators.get(fileName);
+			}
+		}
+
+		public boolean hasValidatorsForKeyword(String keyword) {
+			return validationLists.containsKey(keyword);
+		}
+
+		public HashMap<String, ValidatorManagerEntry> getValidators() {
+			return validators;
+		}
+
+		public HashMap<String, ArrayList<String>> getValidationLists() {
+			return validationLists;
+		}
+	}
+
+	/**
 	 * Construct a new ValidatorManager
 	 */
 	public ValidatorManager() {
@@ -152,23 +184,31 @@ public class ValidatorManager {
 	}
 
 	/**
-	 * Apply the given configuration data
-	 * 
+	 * Apply the given configuration data.
+	 *
+	 * If successful, this removes and replaces all validators and keywords
+	 * that were added through earlier calls to any of applyConfig() or
+	 * addValidator().
+	 *
+	 * If it fails, the currently running set is kept.
+	 *
 	 * @param configData the configuration data to apply
 	 * @throws IOException        If there is an I/O error reading any file
 	 *                            specified in the configuration data
 	 * @throws ConfigurationError if the configuration itself contains an error.
 	 */
 	public void applyConfig(ConfigData configData) throws IOException, ConfigurationError {
-		startReload();
+		ValidatorLoader loader = new ValidatorLoader();
+
 		for (ConfigData.DocumentType docType : configData.documentTypes) {
 			logger.info("Loading document type {} with keyword {}", docType.name, docType.keyword);
-			if (haveValidatorsForKeyword(docType.keyword)) {
+			if (loader.hasValidatorsForKeyword(docType.keyword)) {
 				throw new ConfigurationError("Duplicate Keyword for " + docType.name + ": " + docType.keyword);
 			}
 			for (String validationFile : docType.validationFiles) {
 				logger.info("Adding validation file {} to {}", validationFile, docType.name);
-				addValidator(docType.keyword, validationFile, true);
+				loader.addValidator(docType.keyword, validationFile, true);
+				// TODO: move to the loader?
 				if (configData.lazyLoad) {
 					// Only perform cursory checks
 					File vf = new File(validationFile);
@@ -180,9 +220,11 @@ public class ValidatorManager {
 				}
 			}
 		}
+		_validators = loader.getValidators();
+		_validationLists = loader.getValidationLists();
+
 		setAutoReload(configData.autoReload);
 		setUnknownKeywords(configData.unknownKeywords);
-		finishReload();
 	}
 
 	/**
@@ -209,7 +251,7 @@ public class ValidatorManager {
 	 * @param keyword The keyword to check
 	 * @return true if there are validators configured for the keyword, false if not
 	 */
-	public boolean haveValidatorsForKeyword(String keyword) {
+	public boolean hasValidatorsForKeyword(String keyword) {
 		return _validationLists.containsKey(keyword);
 	}
 
@@ -224,29 +266,16 @@ public class ValidatorManager {
 	 *                 it upon first use.
 	 */
 	public void addValidator(String keyword, String fileName, boolean lazyLoad) {
-		HashMap<String, ValidatorManagerEntry> validators;
-		HashMap<String, ArrayList<String>> validationLists;
-
-		if (reloadingFullConfiguration) {
-			validators = _tmpValidators;
-			validationLists = _tmpValidationLists;
-		} else {
-			validators = _validators;
-			validationLists = _validationLists;
-		}
-
-		ArrayList<String> validatorsForKeyword = validationLists.get(keyword);
+		ArrayList<String> validatorsForKeyword = _validationLists.get(keyword);
 		if (validatorsForKeyword == null) {
 			validatorsForKeyword = new ArrayList<String>();
-			validationLists.put(keyword, validatorsForKeyword);
-			logger.debug("[XX] ADDING KEYWORD TO LIST");
-			logger.debug("[XX] CURRENTLY BUILT LIST: " + validationLists);
+			_validationLists.put(keyword, validatorsForKeyword);
 		}
 		if (!validatorsForKeyword.contains(fileName)) {
 			validatorsForKeyword.add(fileName);
 		}
 		if (!lazyLoad) {
-			validators.get(fileName);
+			_validators.get(fileName);
 		}
 	}
 
@@ -259,22 +288,11 @@ public class ValidatorManager {
 	 * @param validator An instance of a DocumentValidator implementation class
 	 */
 	public void addValidator(String keyword, String fileName, DocumentValidator validator) {
-		HashMap<String, ValidatorManagerEntry> validators;
-		HashMap<String, ArrayList<String>> validationLists;
-
-		if (reloadingFullConfiguration) {
-			validators = _tmpValidators;
-			validationLists = _tmpValidationLists;
-		} else {
-			validators = _validators;
-			validationLists = _validationLists;
-		}
-
 		/* Still need to check whether we have the keyword */
 		ArrayList<String> validatorsForKeyword = _validationLists.get(keyword);
 		if (validatorsForKeyword == null) {
 			validatorsForKeyword = new ArrayList<String>();
-			validationLists.put(keyword, validatorsForKeyword);
+			_validationLists.put(keyword, validatorsForKeyword);
 		}
 		if (!validatorsForKeyword.contains(fileName)) {
 			validatorsForKeyword.add(fileName);
@@ -282,7 +300,7 @@ public class ValidatorManager {
 		// But in this case, we always simply put it in the map of validators
 
 		ValidatorManagerEntry entry = new ValidatorManagerEntry(fileName, validator);
-		validators.put(fileName, entry);
+		_validators.put(fileName, entry);
 	}
 
 	/**
@@ -328,33 +346,33 @@ public class ValidatorManager {
 	 */
 	public ValidationResult validate(String keyword, byte[] source) {
 		ValidationResult result = new ValidationResult();
-        if (keyword == null) {
-            try {
-                KeywordDeriver kwd = new KeywordDeriver();
-                keyword = kwd.deriveKeyword(source);
-            } catch (ValidatorException derivationError) {
-                String msg = "Unable to derive document type keyword: " + derivationError.toString();
-                if (msg.contains("Content is not allowed in prolog")) {
-                    msg = msg + " There may be a mismatch between the encoding of the XML data and the encoding in the XML declaration.";
-                }
-                switch (unknownKeywords) {
-                case WARN:
-                    result.addWarning(msg, null, null, null,
-                            "Validator selection");
-                    break;
-                case ERROR:
-                    result.addError(msg, null, null, null,
-                            "Validator selection");
-                    break;
-                case FAIL:
-                    throw derivationError;
-                case IGNORE:
-                    break;
-                }
-                // Don't continue if we can't even derive the keyword.
-                return result;
-            }
-        }
+		if (keyword == null) {
+			try {
+				KeywordDeriver kwd = new KeywordDeriver();
+				keyword = kwd.deriveKeyword(source);
+			} catch (ValidatorException derivationError) {
+				String msg = "Unable to derive document type keyword: " + derivationError.toString();
+				if (msg.contains("Content is not allowed in prolog")) {
+					msg = msg + " There may be a mismatch between the encoding of the XML data and the encoding in the XML declaration.";
+				}
+				switch (unknownKeywords) {
+				case WARN:
+					result.addWarning(msg, null, null, null,
+							"Validator selection");
+					break;
+				case ERROR:
+					result.addError(msg, null, null, null,
+							"Validator selection");
+					break;
+				case FAIL:
+					throw derivationError;
+				case IGNORE:
+					break;
+				}
+				// Don't continue if we can't even derive the keyword.
+				return result;
+			}
+		}
 
 		ArrayList<String> validatorNames = getValidatorNamesForKeyword(keyword);
 		if (validatorNames.isEmpty()) {
@@ -381,19 +399,4 @@ public class ValidatorManager {
 		return result;
 	}
 
-	private void startReload() {
-		logger.info("Starting full (re)load of configuration");
-		reloadingFullConfiguration = true;
-		_tmpValidators = new HashMap<String, ValidatorManagerEntry>();
-		_tmpValidationLists = new HashMap<String, ArrayList<String>>();
-	}
-
-	private synchronized void finishReload() {
-		_validators = _tmpValidators;
-		_tmpValidators = null;
-		_validationLists = _tmpValidationLists;
-		_tmpValidationLists = null;
-		logger.info("Finished full (re)load of configuration");
-		reloadingFullConfiguration = false;
-	}
 };

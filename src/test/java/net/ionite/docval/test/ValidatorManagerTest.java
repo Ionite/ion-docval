@@ -4,6 +4,8 @@ import net.ionite.docval.validation.ValidationResult;
 import net.ionite.docval.validation.ValidatorException;
 import net.ionite.docval.validation.ValidatorManager;
 import net.ionite.docval.validation.validator.DocumentValidator;
+import net.ionite.docval.config.ConfigData;
+import net.ionite.docval.config.ConfigurationError;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,7 +61,7 @@ public class ValidatorManagerTest {
 	}
 
 	@Test
-	public void reloadTest() throws IOException {
+	public void autoReloadTest() throws IOException {
 		Path temp = Files.createTempFile("ivdtest", ".xsd");
 
 		// Create a DocumentValidator with this xsd specification
@@ -104,6 +106,45 @@ public class ValidatorManagerTest {
 		}
 
 		Files.delete(temp);
+	}
+
+	@Test
+	public void configReloadTest() throws IOException, ConfigurationError {
+		// Set up two different configurations
+		// This test will check whether reloading a different configuration
+		// actually adds new keywords, and removes the old ones
+
+		ConfigData configData1 = new ConfigData();
+		ConfigData configData2 = new ConfigData();
+
+		ConfigData.DocumentType documentType1 = configData1.new DocumentType();
+		documentType1.name = "Type 1";
+		documentType1.keyword = new String("type1");
+		documentType1.validationFiles.add(getDataFile("xsd/shiporder_good.xsd"));
+
+		ConfigData.DocumentType documentType2 = configData1.new DocumentType();
+		documentType2.name = "Type 2";
+		documentType2.keyword = new String("type2");
+		documentType2.validationFiles.add(getDataFile("xslt/cen-ubl.xsl"));
+
+		configData1.documentTypes.add(documentType1);
+		configData2.documentTypes.add(documentType1);
+		configData2.documentTypes.add(documentType2);
+
+		validatorManager.applyConfig(configData1);
+		Assert.assertTrue(validatorManager.hasValidatorsForKeyword("type1"));
+		Assert.assertFalse(validatorManager.hasValidatorsForKeyword("type2"));
+
+		// Reloading with config 2 should add a validator for type 2 too
+		validatorManager.applyConfig(configData2);
+		Assert.assertTrue(validatorManager.hasValidatorsForKeyword("type1"));
+		Assert.assertTrue(validatorManager.hasValidatorsForKeyword("type2"));
+
+		// And then reloading 1 should remove it again
+		validatorManager.applyConfig(configData1);
+		Assert.assertTrue(validatorManager.hasValidatorsForKeyword("type1"));
+		Assert.assertFalse(validatorManager.hasValidatorsForKeyword("type2"));
+
 	}
 
 	@Test
