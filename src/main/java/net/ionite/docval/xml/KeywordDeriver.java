@@ -68,11 +68,21 @@ import net.ionite.docval.validation.ValidatorException;
  * <ul>
  * <li>The value of the UBLVersionID Element, if the document is UBL</li>
  * <li>"2.1" if the document is UBL (2), and no UBLVersionID element is
- * present</li>
+ * present, unless it's one of the specific Logistics documents in this list</li>
  * <li>"D16B" if the document is CII</li>
+ * <li>"1.0" if the document is a Peppol Transaction Statistics Report</li>
+ * <li>"1.1" if the document is a Peppol End User Statistics Report</li>
+ * <li>"2.3" if the document is a Peppol Logistics Receipt Advice</li>
+ * <li>"2.3" if the document is a Peppol Logistics Weight Statement</li>
+ * <li>"2.3" if the document is a Peppol Logistics Transport Execution Plan Request</li>
+ * <li>"2.3" if the document is a Peppol Logistics Transport Execution Plan</li>
+ * <li>"2.3" if the document is a Peppol Logistics Waybill</li>
+ * <li>"2.3" if the document is a Peppol Logistics Transportation Status Request</li>
+ * <li>"2.3" if the document is a Peppol Logistics Transportation Status</li>
  * </ul>
  * </li>
  * </ul>
+ * These last ones are because the files themselves do not contain this information, and the specifications do state it should be these values.
  * 
  * For example, a Peppol BIS 3 UBL Invoice document would have the following
  * derived keyword:
@@ -141,10 +151,22 @@ public class KeywordDeriver {
 				return namespace + "::" + rootElement;
 			}
 			if (version == null) {
-				if (namespace.startsWith("urn:oasis:names:specification:ubl")) {
+                if (namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:ReceiptAdvice-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:WeightStatement-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:TransportExecutionPlanRequest-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:TransportExecutionPlan-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:Waybill-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:TransportationStatusRequest-2") ||
+                    namespace.equals("urn:oasis:names:specification:ubl:schema:xsd:TransportationStatus-2")) {
+                    version = "2.3";
+				} else if (namespace.startsWith("urn:oasis:names:specification:ubl")) {
 					version = "2.1";
 				} else if (namespace.startsWith("urn:un:unece:uncefact:data:standard:CrossIndustryInvoice")) {
 					version = "D16B";
+				} else if (namespace.startsWith("urn:fdc:peppol:transaction-statistics-report:1.0")) {
+					version = "1.0";
+				} else if (namespace.startsWith("urn:fdc:peppol:end-user-statistics-report:1.1")) {
+					version = "1.1";
 				}
 			}
 

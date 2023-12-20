@@ -114,6 +114,10 @@ def derive_keyword_from_xml(xml_bytes):
         version = "2.1"
     elif root_tag.namespace.startswith("urn:un:unece:uncefact:data:standard:CrossIndustryInvoice:"):
         version = "D16B"
+    elif root_tag.namespace.startswith("urn:fdc:peppol:transaction-statistics-report:1.0"):
+        version = "1.0"
+    elif root_tag.namespace.startswith("urn:fdc:peppol:end-user-statistics-report:1.1"):
+        version = "1.1"
     else:
         version = None
 

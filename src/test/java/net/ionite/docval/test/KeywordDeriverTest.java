@@ -66,14 +66,62 @@ public class KeywordDeriverTest {
 	@Test
 	public void testKeywordDeriverEUSR110() {
 		testDocument("xml/eusr-1.1.0.xml",
-				"urn:fdc:peppol:end-user-statistics-report:1.1::EndUserStatisticsReport##urn:fdc:peppol.eu:edec:trns:end-user-statistics-report:1.1");
+				"urn:fdc:peppol:end-user-statistics-report:1.1::EndUserStatisticsReport##urn:fdc:peppol.eu:edec:trns:end-user-statistics-report:1.1::1.1");
 	}
 
 	@Test
 	public void testKeywordDeriverTSR100() {
 		testDocument("xml/tsr-1.0.0.xml",
-				"urn:fdc:peppol:transaction-statistics-report:1.0::TransactionStatisticsReport##urn:fdc:peppol.eu:edec:trns:transaction-statistics-reporting:1.0");
+				"urn:fdc:peppol:transaction-statistics-report:1.0::TransactionStatisticsReport##urn:fdc:peppol.eu:edec:trns:transaction-statistics-reporting:1.0::1.0");
 	}
+
+    @Test
+    public void testKeywordDeriverLogisticsAdvancedDespatchAdvice_Example_Full() {
+		testDocument("xml/AdvancedDespatchAdvice_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:DespatchAdvice-2::DespatchAdvice##urn:fdc:peppol.eu:logistics:trns:advanced_despatch_advice:1::2.1");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsReceiptAdvice_Example_Full() {
+		testDocument("xml/ReceiptAdvice_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:ReceiptAdvice-2::ReceiptAdvice##urn:fdc:peppol.eu:logistics:trns:receipt_advice:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsTransportExecutionPlanRequest_Example_Full() {
+		testDocument("xml/TransportExecutionPlanRequest_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:TransportExecutionPlanRequest-2::TransportExecutionPlanRequest##urn:fdc:peppol.eu:logistics:trns:transport_execution_plan_request:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsTransportExecutionPlan_Example_Full() {
+		testDocument("xml/TransportExecutionPlan_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:TransportExecutionPlan-2::TransportExecutionPlan##urn:fdc:peppol.eu:logistics:trns:transport_execution_plan:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsTransportationStatusRequest_Example_Full() {
+		testDocument("xml/TransportationStatusRequest_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:TransportationStatusRequest-2::TransportationStatusRequest##urn:fdc:peppol.eu:logistics:trns:transportation_status_request:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsTransportationStatus_Example_Full() {
+		testDocument("xml/TransportationStatus_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:TransportationStatus-2::TransportationStatus##urn:fdc:peppol.eu:logistics:trns:transportation_status:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsWaybill_Example_Full() {
+		testDocument("xml/Waybill_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:Waybill-2::Waybill##urn:fdc:peppol.eu:logistics:trns:waybill:1::2.3");
+    }
+
+    @Test
+    public void testKeywordDeriverLogisticsWeightStatement_Example_Full() {
+		testDocument("xml/WeightStatement_Example_Full.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:WeightStatement-2::WeightStatement##urn:fdc:peppol.eu:logistics:trns:weight_statement:1::2.3");
+    }
 
 	@Test
 	public void testKeywordDeriverXXE1() {
