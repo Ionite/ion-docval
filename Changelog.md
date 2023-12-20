@@ -1,4 +1,4 @@
-# 1.0.2
+# 1.1.0
 
 * Added a number of exceptions to the default 'version' field in the 
 KeyworDeriver. To match the document type identifier specifications for 
