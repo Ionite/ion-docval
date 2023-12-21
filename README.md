@@ -6,13 +6,16 @@
 ion-docval is an XML document validation library and toolset.
 
 Features:
-- validate an XML document against multiple definition files
-- Supports XML Schema (.xsd) files
-- Supports Schematron (.sch) files
-- Supports SVRL Transformation files (.xsl/.xslt) files (i.e. those generated from Schematron)
-- Integratable .jar file, direct command-line application, and (local) server for bulk processing
+- validate an XML document against one or more definition files
+  - Supports XML Schema (.xsd) files
+  - Supports Schematron (.sch) files
+  - Supports SVRL Transformation files (.xsl/.xslt) files (i.e. those generated from Schematron)
+- Multiple integration options:
+  - Integratable .jar file
+  - direct command-line application
+  - (local) server for bulk processing, as well as integration with non-java applications
 
-With ion-docval, you can run a local validation service without having to upload your documents to an online validation tool.
+With ion-docval, you can run a local validation service without having to upload your documents to an online validation tool, and while this is a Java program (in order to fully support XSLT 2 and XPath 2), it has been designed to be used in non-Java environments.
 
 This is the same software that is used as part of the [NPa Peppol Test Tool](https://test.peppolautoriteit.nl/validate).
 
