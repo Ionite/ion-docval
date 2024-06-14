@@ -32,6 +32,12 @@ public class ValidatorManager {
 
 	/** The mapping of keywords to validation lists */
 	private HashMap<String, ArrayList<String>> _validationLists;
+    
+    /**
+     * Each keyword is also associated with a single document type
+     * name
+     */
+    private HashMap<String, String> _documentTypeNames;
 
 	/**
 	 * If true, automatically check whether entries need to be reloaded
@@ -150,6 +156,7 @@ public class ValidatorManager {
 		logger = LoggerFactory.getLogger(this.getClass().getName());
 		_validators = new HashMap<String, ValidatorManagerEntry>();
 		_validationLists = new HashMap<String, ArrayList<String>>();
+        _documentTypeNames = new HashMap<String, String>();
 	}
 
 	/**
@@ -205,6 +212,7 @@ public class ValidatorManager {
 			if (loader.hasValidatorsForKeyword(docType.keyword)) {
 				throw new ConfigurationError("Duplicate Keyword for " + docType.name + ": " + docType.keyword);
 			}
+            _documentTypeNames.put(docType.keyword, docType.name);
 			for (String validationFile : docType.validationFiles) {
 				logger.info("Adding validation file {} to {}", validationFile, docType.name);
 				loader.addValidator(docType.keyword, validationFile, true);
@@ -392,6 +400,8 @@ public class ValidatorManager {
 				break;
 			}
 		} else {
+            result.setDocumentTypeName(_documentTypeNames.get(keyword));
+            
 			for (String validatorName : validatorNames) {
 				getValidator(validatorName).validate(source, result);
 			}

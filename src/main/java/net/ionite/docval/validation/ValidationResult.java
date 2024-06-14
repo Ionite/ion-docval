@@ -31,6 +31,8 @@ public class ValidationResult {
 	private ArrayList<ValidationResultItem> errors;
 	/** The list of warnings that were encountered during the validation */
 	private ArrayList<ValidationResultItem> warnings;
+    /** The name of the document type, if set. May be null */
+    private String _documentTypeName = null;
 
 	/**
 	 * Constructor
@@ -39,6 +41,10 @@ public class ValidationResult {
 		errors = new ArrayList<ValidationResultItem>();
 		warnings = new ArrayList<ValidationResultItem>();
 	}
+    
+    public void setDocumentTypeName(String name) {
+        _documentTypeName = name;
+    }
 
 	/**
 	 * Returns the number of errors
@@ -112,6 +118,9 @@ public class ValidationResult {
 	@SuppressWarnings("unchecked") // JSONObject extends HashMap but is not generic itself
 	public JSONObject toJSON() {
 		JSONObject result = new JSONObject();
+        if (_documentTypeName != null) {
+            result.put("document_type", _documentTypeName);
+        }
 		result.put("error_count", errorCount());
 		result.put("warning_count", warningCount());
 		JSONArray errorList = new JSONArray();
@@ -211,6 +220,9 @@ public class ValidationResult {
 		SaplingElement root = Saplings.elem("ValidationResult")
 				.withChild(Saplings.elem("ErrorCount").withText(Integer.valueOf(errorCount()).toString()))
 				.withChild(Saplings.elem("WarningCount").withText(Integer.valueOf(warningCount()).toString()));
+        if (_documentTypeName != null) {
+            root = root.withChild(Saplings.elem("DocumentType").withText(_documentTypeName));
+        }
 		if (errorCount() > 0) {
 			SaplingElement errorsElement = Saplings.elem("Errors");
 			for (ValidationResultItem item : errors) {
