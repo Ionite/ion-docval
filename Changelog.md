@@ -1,3 +1,10 @@
+# 1.2.1
+
+* Fixed issue with keyword derivation if UBLVersionID element is present in the document
+* Fixed signal handling: check for availability of SIGHUP
+* Improved logging
+
+
 # 1.2.0
 
 The ValidatorManager now also keeps a list of Document Type Names,
