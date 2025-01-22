@@ -1,3 +1,11 @@
+# 1.2.0
+
+The ValidatorManager now also keeps a list of Document Type Names,
+if initialized with a configuration data object.
+When validating, this name is added to the Validation Result.
+The HttpServer includes this value in its response, as "document_type"
+in case of JSON, and <DocumenType> in case of XML.
+
 # 1.1.0
 
 * Added a number of exceptions to the default 'version' field in the 

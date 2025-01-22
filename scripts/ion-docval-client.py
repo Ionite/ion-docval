@@ -106,7 +106,7 @@ def derive_keyword_from_xml(xml_bytes):
     ]:
         doctype_el = document.find(path)
         if doctype_el is not None and doctype_el.text is not None:
-            doctype = doctype_el.text
+            doctype = doctype_el.text.strip()
             break
 
     # default versions
