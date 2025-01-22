@@ -134,7 +134,9 @@ public class KeywordDeriver {
 
 		@Override
 		public void endElement(String uri, String localName, String qName) {
-			if (customization == null && localName.equals("CustomizationID")) {
+            if (version == null && localName.equals("UBLVersionID")) {
+                version = _currentValue.toString();
+			} else if (customization == null && localName.equals("CustomizationID")) {
 				customization = _currentValue.toString();
 			} else if (customization == null && inCIIDocumentParameter && localName.equals("ID")) {
 				customization = _currentValue.toString();

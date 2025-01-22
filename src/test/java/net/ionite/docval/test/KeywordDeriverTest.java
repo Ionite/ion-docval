@@ -123,6 +123,12 @@ public class KeywordDeriverTest {
 				"urn:oasis:names:specification:ubl:schema:xsd:WeightStatement-2::WeightStatement##urn:fdc:peppol.eu:logistics:trns:weight_statement:1::2.3");
     }
 
+    @Test
+    public void testKeywordDeriverPB3AdvancedOrder() {
+		testDocument("xml/PB3_Advanced_Order_Example.xml",
+				"urn:oasis:names:specification:ubl:schema:xsd:OrderResponse-2::OrderResponse##urn:fdc:peppol.eu:poacc:trns:order_response_advanced:3::2.3");
+    }
+
 	@Test
 	public void testKeywordDeriverXXE1() {
 		try {
