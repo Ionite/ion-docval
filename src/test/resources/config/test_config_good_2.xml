@@ -1,0 +1,25 @@
+<Config>
+    <Options>
+        <!-- Do not automatically reload validation files if they are 
+             updated on the system -->
+        <AutoReload>false</AutoReload>
+        <!-- Allow 'validation' of unknown keywords as an error(1 error, 0 warnings) -->
+        <UnknownKeywords>error</UnknownKeywords>
+    </Options>
+    <Server>
+        <Listen>
+            <Address>127.0.0.1</Address>
+            <Port>35791</Port>
+        </Listen>
+    </Server>
+    <!-- List of supported document types -->
+    <DocumentType>
+    	<!-- A short name for this document type -->
+    	<Name>SI-UBL 2.0</Name>
+        <!-- The keyword to use. See the documentation on how to use derived keywords -->
+        <Keyword>default</Keyword>
+        <!-- The list of validation files for this keyword -->
+        <ValidationFile>/home/jelte/repos/XTST/document_types/testtool/xsd_ubl2.1/maindoc/UBL-Invoice-2.1.xsd</ValidationFile>
+        <ValidationFile>/home/jelte/ionite/repos/validation/xsl/si-ubl-2.0.xsl</ValidationFile>
+    </DocumentType>
+</Config>
